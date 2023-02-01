@@ -14,26 +14,28 @@
 	<body>
 		<div class="main-content">
 			<section>
-				<form id="formCreateTask">
+				<form id="form-create-task">
 					<div class="mb-3">
-						<label for="titulo" class="form-label">Título da tarefa</label>
+						<label for="title" class="form-label">Título da tarefa</label>
 						<input
 							type="text"
 							class="form-control"
-							id="titulo"
+							id="title"
 							placeholder="Informe o título"
-                            required
+							required
 						/>
 					</div>
 					<div class="mb-3">
-						<label for="descricao" class="form-label">Descrição da tarefa</label>
+						<label for="description" class="form-label"
+							>Descrição da tarefa</label
+						>
 						<textarea
 							class="form-control"
-							id="descricao"
+							id="description"
 							rows="2"
 							maxlength="80"
 							placeholder="Informe a descrição"
-                            required
+							required
 						></textarea>
 					</div>
 					<div>
@@ -41,9 +43,37 @@
 					</div>
 				</form>
 			</section>
-			<section>
+			<section class="overflow-auto">
+				<div>
+					<span>filtros</span>
+					<form id="form-filter-tasks" class="row g-3">
+						<div class="col-auto">
+							<input
+								type="text"
+								class="form-control form-control-sm"
+								id="titleFilter"
+								placeholder="Filtrar título"
+							/>
+						</div>
+						<div class="col-auto">
+							<input
+								type="text"
+								class="form-control form-control-sm"
+								id="descriptionFilter"
+								placeholder="Filtrar descrição"
+							/>
+						</div>
+						<div class="col-auto">
+							<button type="submit" class="btn btn-primary btn-sm">
+								Filtrar
+							</button>
+						</div>
+					</form>
+				</div>
 				<table class="table table-dark table-striped table-hover caption-top">
-                    <caption class="title">Lista de tarefas</caption>
+					<caption class="title">
+						Lista de tarefas
+					</caption>
 					<thead>
 						<tr>
 							<th>#</th>

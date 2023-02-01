@@ -1,4 +1,5 @@
-const form = document.getElementById("formCreateTask");
+const form = document.getElementById("form-create-task");
+const formFilter = document.getElementById("form-filter-tasks");
 const tbodyTasks = document.getElementById("tbody-tasks");
 
 const KEY_LIST_TASK_LOCAL_STORAGE = "tasks";
@@ -6,38 +7,53 @@ const KEY_LIST_TASK_LOCAL_STORAGE = "tasks";
 const tasks = getListTaskLocalStorage();
 
 if (tasks.length > 0) {
-	updateViewTable();
+	updateViewTable(tasks);
 }
 
 form.addEventListener("submit", (event) => {
 	event.preventDefault();
 
 	const form = event.target;
-	const { titulo, descricao } = form.elements;
+	const { title, description } = form.elements;
 
 	tasks.push({
-		title: titulo.value,
-		description: descricao.value,
+		title: title.value,
+		description: description.value,
 	});
 
-	titulo.value = "";
-	descricao.value = "";
+	title.value = "";
+	description.value = "";
 
 	saveTasksLocalStorage();
-	updateViewTable();
+	updateViewTable(tasks);
 });
 
-function updateViewTable() {
+formFilter.addEventListener("submit", (event) => {
+	event.preventDefault();
+
+	const form = event.target;
+	const { titleFilter, descriptionFilter } = form.elements;
+
+	const tasksFiltered = filterTasks({
+		title: titleFilter.value,
+		description: descriptionFilter.value,
+	});
+
+	updateViewTable(tasksFiltered);
+	
+});
+
+function updateViewTable(list) {
 	tbodyTasks.innerHTML = "";
 
-	tasks.forEach((value, index) => {
+	list.forEach((value, index) => {
 		const trElement = document.createElement("tr");
 
 		let classIcon = "filter-white-icon";
-		if(value.status){
+		if (value.status) {
 			const myClass = getClassByStatus(value.status);
-			if(myClass){
-				trElement.classList.add(myClass)
+			if (myClass) {
+				trElement.classList.add(myClass);
 				classIcon = "";
 			}
 		}
@@ -110,15 +126,29 @@ function getListTaskLocalStorage() {
 }
 
 function deleteTask(index) {
-	console.log(index);
 	tasks.splice(index, 1);
 
-	updateViewTable();
+	updateViewTable(tasks);
 	saveTasksLocalStorage();
 }
 
 function updateStatusTask(index, status){
 	tasks[index].status = status;
 	saveTasksLocalStorage();
-	updateViewTable();
+	updateViewTable(tasks);
+}
+
+function filterTasks({title, description}){
+	if(title === "" && description === ""){
+		return tasks;
+	}
+
+	const newTasks = tasks.filter(task => {
+		const descriptionOk = description.length > 0 && task.description.includes(description);
+		const titleOk = title.length > 0 && task.title.includes(title);
+
+		return descriptionOk || titleOk;
+	});;
+
+	return newTasks;
 }
